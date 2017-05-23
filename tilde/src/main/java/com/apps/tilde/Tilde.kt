@@ -36,10 +36,18 @@ object Tilde {
     ///
     /// - parameter array: The list to flatten.
     /// - returns: Flattened list.
-    fun <T> flatten(list: List<T>): List<T> {
-        val results = ArrayList<T>()
-        list.flatMapTo(results) { list }
-        return list
+    fun <T> flatten(list: List<T>, resultList: ArrayList<T>): ArrayList<T> {
+        for (items in list) {
+            when (items) {
+                is List<*> -> {
+                    flatten(items as List<T>, resultList)
+                }
+                else -> {
+                    resultList.add(items)
+                }
+            }
+        }
+        return resultList
     }
 
     // Returns the collection wrapped in the chain object
@@ -90,8 +98,8 @@ open class Chain<T>(collection: List<T>) {
     ///
     /// - returns: The wrapper object.
     fun flatten(): Chain<T> {
-        return this.queue {
-            return@queue Wrapper(_t.flatten(this.value))
+        return queue {
+            return@queue Wrapper(_t.flatten(it.value, ArrayList()))
         }
     }
 
@@ -99,8 +107,8 @@ open class Chain<T>(collection: List<T>) {
     ///
     /// - returns: The wrapper object.
     fun initial(): Chain<T> {
-        return this.queue {
-            return@queue Wrapper(this.value.dropLast(1))
+        return queue {
+            return@queue Wrapper(it.value.dropLast(1))
         }
     }
 
@@ -109,8 +117,8 @@ open class Chain<T>(collection: List<T>) {
     /// - parameter numElements: Number of items to remove from the end of the array.
     /// - returns: The wrapper object.
     fun initial(numElements: Int): Chain<T> {
-        return this.queue {
-            return@queue Wrapper(this.value.dropLast(numElements))
+        return queue {
+            return@queue Wrapper(it.value.dropLast(numElements))
         }
     }
 
@@ -119,8 +127,8 @@ open class Chain<T>(collection: List<T>) {
     /// - parameter function: Function to map.
     /// - returns: The wrapper object.
     fun map(function: (T) -> T): Chain<T> {
-        return this.queue {
-            return@queue Wrapper(this.value.map(function))
+        return queue {
+            return@queue Wrapper(it.value.map(function))
         }
     }
 
@@ -129,12 +137,12 @@ open class Chain<T>(collection: List<T>) {
     /// - parameter function: The array to wrap.
     /// - returns: The wrapper object.
     fun each(function: (T) -> Unit): Chain<T> {
-        System.out.println(this.value)
-        System.out.println(function)
-        System.out.println( Wrapper(this.value.onEach { function }))
-
         return queue {
-            return@queue Wrapper(this.value.onEach { function })
+            wrapper ->
+            return@queue Wrapper(wrapper.value.onEach {
+                function(it)
+            }
+            )
         }
     }
 
@@ -143,8 +151,8 @@ open class Chain<T>(collection: List<T>) {
     /// - parameter function: Function to tell whether to keep an element or remove.
     /// - returns: The wrapper object.
     fun filter(function: (T) -> Boolean): Chain<T> {
-        return this.queue {
-            return@queue Wrapper(this.value.filter(function))
+        return queue {
+            return@queue Wrapper(it.value.filter(function))
         }
     }
 
@@ -178,7 +186,7 @@ open class Chain<T>(collection: List<T>) {
     /// - returns: The wrapper object.
     fun slice(start: Int, end: Int): Chain<T> {
         return queue {
-            return@queue Wrapper(this.value.slice(IntRange(start, end)))
+            return@queue Wrapper(it.value.slice(IntRange(start, end)))
         }
     }
 
