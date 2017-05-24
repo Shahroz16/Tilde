@@ -40,4 +40,16 @@ class TildeTest {
 
     }
 
+    @Test
+    fun testExtensions() {
+        val array = arrayListOf(1, 3, 2, 4, 5)
+        val cycle = ArrayList<Int>()
+        array.cycle(3) {
+            cycle.add(it)
+        }
+        emptyArray<String>().forEach {  }
+        Assert.assertEquals("Cycle", arrayListOf(1, 3, 2, 4, 5, 1, 3, 2, 4, 5, 1, 3, 2, 4, 5), cycle)
+        System.out.println(array.chunks(2))
+    }
+
 }
