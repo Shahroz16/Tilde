@@ -7,31 +7,92 @@ package com.apps.tilde
 typealias _t = Tilde
 const val TAG: String = "TILDE"
 
-
 object Tilde {
 
-    /// Creates an list of elements from the specified indexes, or keys, of the collection.
-    /// Indexes may be specified as individual arguments or as arrays of indexes.
-    ///
-    /// - parameter array: The list to source from
-    /// - parameter indexes: Get elements from these indexes
-    /// - returns: New list with elements from the indexes specified.
-    fun <T> at(list: List<T>, vararg indexes: Int): List<T> {
-        val results = ArrayList<T>()
-        indexes.mapTo(results) { list[it] }
-        return results;
+    /**
+     * Creates a function that executes passed function only after being called n times.
+     *
+     * @param   num   Number of times after which to call function.
+     * @param   function  Function to be called that takes params.
+     * @return  Function that can be called n times after which the callback function is called.
+     */
+    fun <T, E> after(num: Int, function: (Array<T>) -> E?): (Array<T>) -> E? {
+        var counter = num
+        return {
+            params: Array<T> ->
+            counter = -1
+            if (counter <= 0) {
+                function(params)
+            }
+            TODO("Write it later")
+        }
     }
 
-    /// Create a copy of an List
-    ///
-    /// - parameter array: The List to copy
-    /// - returns: New copy of List
+    /**
+     * Creates a function that executes passed function only after being called n times.
+     *
+     * @param   num         Number of times after which to call function.
+     * @param   function    Function to be called that does not take any params.
+     * @return  Function that can be called n times after which the callback function is called.
+     */
+    fun <T> after(num: Int, function: () -> T): () -> T {
+        TODO("Write it later")
+//        val f = this.after(num) {
+//            params ->
+//            return@after function()
+//        }
+    }
+
+    /**
+     * Creates a function that, when called, invokes func with the binding of arguments provided.
+     *
+     * @param   function    Function to be bound.
+     * @param   parameters  Parameters to be passed into the function when being invoked.
+     * @return  A new function that when called will invoked the passed function with the parameters specified.
+     */
+    fun <T, E> bind(function: (Array<T>) -> E, parameters: Array<T>): () -> E {
+        return {
+            function(parameters)
+        }
+    }
+
+    /**
+     * Create a copy of an List.
+     *
+     * @param   array   The List to copy.
+     * @return  New copy of List.
+     */
     fun <T> copy(list: List<T>): List<T> {
         val results = ArrayList<T>()
         list.mapTo(results) { it }
         return results
     }
 
+    /**
+     * Compose two or more functions passing result of the first function
+     * into the next function until all the functions have been evaluated.
+     *
+     * @param   functions   list of functions.
+     * @return  A function that can be called with variadic parameters of values
+     */
+    fun <T> compose(vararg functions: (Array<(Array<T>) -> Array<T>>) -> ((Array<T>) -> Array<T>)): Unit {
+        TODO("")
+//    open class func compose<T>(_ functions: ((T...) -> [T])...) -> ((T...) -> [T]) {
+//        typealias Function = ([T]) -> [T]
+//        return {
+//            var result = $0
+//            for fun in functions {
+//                let f = unsafeBitCast(fun, to: Function.self)
+//                result = f(result)
+//            }
+//            return result
+//        }
+//    }
+    }
+
+    fun <T> range(start: Int = 0, end: Int, inclusive: Boolean = true): IntRange {
+        return start..if (inclusive) end else end - 1
+    }
 
     /// Flattens a nested lists of any depth.
     ///
