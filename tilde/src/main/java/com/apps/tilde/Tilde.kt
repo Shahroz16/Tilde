@@ -1,5 +1,7 @@
 package com.apps.tilde
 
+import android.os.Handler
+
 /**
  * Created by shahrozali on 5/18/17.
  */
@@ -90,14 +92,37 @@ object Tilde {
 //    }
     }
 
+    /**
+     * Searches this list or its range for an element for which [comparison] function returns zero using the binary search algorithm.
+     * The list is expected to be sorted into ascending order according to the provided [comparison],
+     * otherwise the result is undefined.
+     *
+     * If the list contains multiple elements for which [comparison] returns zero, there is no guarantee which one will be found.
+     *
+     * @param comparison function that compares an element of the list with the element being searched.
+     *
+     * @return the index of the found element, if it is contained in the list within the specified range;
+     * otherwise, the inverted insertion point `(-insertion point - 1)`.
+     * The insertion point is defined as the index at which the element should be inserted,
+     * so that the list (or the specified subrange of list) still remains sorted.
+     */
+    fun <T> binarySearch(list: List<T>, from: Int = 0, to: Int = list.size, comparison: (T) -> Int): Int {
+        return list.binarySearch(fromIndex = from, toIndex = to) {
+            comparison(it)
+        }
+    }
+
     fun <T> range(start: Int = 0, end: Int, inclusive: Boolean = true): IntRange {
         return start..if (inclusive) end else end - 1
     }
 
-    /// Flattens a nested lists of any depth.
-    ///
-    /// - parameter array: The list to flatten.
-    /// - returns: Flattened list.
+
+    /**
+     * Flattens a nested lists of any depth.
+     *
+     * @param   list        The list to flatten.
+     * @return  Flattened list.
+     */
     fun <T> flatten(list: List<T>, resultList: ArrayList<T>): ArrayList<T> {
         for (items in list) {
             when (items) {
@@ -112,14 +137,16 @@ object Tilde {
         return resultList
     }
 
-    // Returns the collection wrapped in the chain object
-    ///
-    /// - parameter collection: of elements
-    /// - returns: Chain object
+    /**
+     * Returns the collection wrapped in the chain object
+     *
+     * @param   list collection: of elements
+     * @return  Chain object.
+     */
+
     fun <T> chain(list: List<T>): Chain<T> {
         return Chain(list)
     }
-
 
 }
 
@@ -142,62 +169,75 @@ open class Chain<T>(collection: List<T>) {
         this.result = Wrapper(collection)
     }
 
-    /// Get the first object in the wrapper object.
-    ///
-    /// - returns: First element from the list.
+    /**
+     * Get the first object in the wrapper object.
+     *
+     * @return  First element from the list.
+     */
     fun first(): T {
         return value.first()
     }
 
-    /// Get the last object in the wrapper object.
-    ///
-    /// - returns: Last element from the list.
+    /**
+     * Get the last object in the wrapper object.
+     *
+     * @return  Last element from the list.
+     */
     fun last(): T {
         return value.last()
     }
 
-    /// Flattens nested lists.
-    ///
-    /// - returns: The wrapper object.
+    /**
+     * Flattens nested lists.
+     *
+     * @return  The wrapper object.
+     */
     fun flatten(): Chain<T> {
         return queue {
             return@queue Wrapper(_t.flatten(it.value, ArrayList()))
         }
     }
 
-    /// Keeps all the elements except last one.
-    ///
-    /// - returns: The wrapper object.
+    /**
+     * Keeps all the elements except last one.
+     *
+     * @return  The wrapper object.
+     */
     fun initial(): Chain<T> {
         return queue {
             return@queue Wrapper(it.value.dropLast(1))
         }
     }
 
-    /// Keeps all the elements except last n elements.
-    ///
-    /// - parameter numElements: Number of items to remove from the end of the array.
-    /// - returns: The wrapper object.
+    /**
+     * Keeps all the elements except last n elements.
+     *
+     * @param numElements: Number of items to remove from the end of the list.
+     * @return  The wrapper object.
+     */
     fun initial(numElements: Int): Chain<T> {
         return queue {
             return@queue Wrapper(it.value.dropLast(numElements))
         }
     }
 
-    /// Maps elements to new elements.
-    ///
-    /// - parameter function: Function to map.
-    /// - returns: The wrapper object.
+    /**
+     * Maps elements to new elements.
+     *
+     * @param function: Function to map.
+     * @return  The wrapper object.
+     */
     fun map(function: (T) -> T): Chain<T> {
         return queue {
             return@queue Wrapper(it.value.map(function))
         }
     }
 
-    /// Get the first object in the wrapper object.
-    ///
-    /// - parameter function: The array to wrap.
-    /// - returns: The wrapper object.
+    /**
+     * Performs the given [function] on each element.
+     *
+     * @return  The wrapper object.
+     */
     fun each(function: (T) -> Unit): Chain<T> {
         return queue {
             wrapper ->
@@ -208,44 +248,44 @@ open class Chain<T>(collection: List<T>) {
         }
     }
 
-    /// Filter elements based on the function passed.
-    ///
-    /// - parameter function: Function to tell whether to keep an element or remove.
-    /// - returns: The wrapper object.
+    /**
+     * Filter elements based on the [function] passed.
+     *
+     * @return  The wrapper object.
+     */
     fun filter(function: (T) -> Boolean): Chain<T> {
         return queue {
             return@queue Wrapper(it.value.filter(function))
         }
     }
 
-    /// Returns if all elements in array are true based on the passed function.
-    ///
-    /// - parameter function: Function to tell whether element value is true or false.
-    /// - returns: Whether all elements are true according to func function.
+    /**
+     * Returns `true` if all elements match the given [function].
+     */
     fun all(function: (T) -> Boolean): Boolean {
         return this.value.all(function)
     }
 
-    /// Returns if any element in array is true based on the passed function.
-    ///
-    /// - parameter function: Function to tell whether element value is true or false.
-    /// - returns: Whether any one element is true according to func function in the array.
+    /**
+     * Returns `true` if at least one element matches the given [function].
+     */
     fun any(function: (T) -> Boolean): Boolean {
         return this.value.any(function)
     }
 
-    /// Returns size of the array
-    ///
-    /// - returns: The wrapper object.
+    /**
+     * Returns size of the list.
+     *
+     */
     fun size(): Int {
         return this.value.size
     }
 
-    /// Slice the array into smaller size based on start and end value.
-    ///
-    /// - parameter start: Start index to start slicing from.
-    /// - parameter end: End index to stop slicing to and not including element at that index.
-    /// - returns: The wrapper object.
+    /**
+     * Returns a view of the portion of this list between the specified [start] (inclusive) and [end] (exclusive).
+     *
+     * @return The wrapper object.
+     */
     fun slice(start: Int, end: Int): Chain<T> {
         return queue {
             return@queue Wrapper(it.value.slice(IntRange(start, end)))

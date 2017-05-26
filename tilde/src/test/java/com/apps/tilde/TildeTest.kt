@@ -39,13 +39,24 @@ class TildeTest {
     }
 
     @Test
+    fun testBinarySearch() {
+        val samplelist = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
+        val result = _t.binarySearch(samplelist) {
+            i ->
+            i.compareTo(5)
+        }
+
+        Assert.assertEquals("Binary search test", 4, result);
+    }
+
+    @Test
     fun testExtensions() {
         val array = arrayListOf(1, 3, 2, 4, 5)
         val cycle = ArrayList<Int>()
         array.cycle(3) {
             cycle.add(it)
         }
-        emptyArray<String>().forEach {  }
+        emptyArray<String>().forEach { }
         Assert.assertEquals("Cycle", arrayListOf(1, 3, 2, 4, 5, 1, 3, 2, 4, 5, 1, 3, 2, 4, 5), cycle)
         System.out.println(array.chunks(2))
     }

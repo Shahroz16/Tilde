@@ -60,6 +60,7 @@ fun <T> Iterable<T?>.compact(): ArrayList<T> {
     return result
 }
 
+
 /**
  * Cycles through the array n times passing each element into the callback function
  * And indefinitely if n is -1
