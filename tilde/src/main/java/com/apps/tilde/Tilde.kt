@@ -32,6 +32,7 @@ object Tilde {
         return results
     }
 
+
     /// Flattens a nested lists of any depth.
     ///
     /// - parameter array: The list to flatten.
