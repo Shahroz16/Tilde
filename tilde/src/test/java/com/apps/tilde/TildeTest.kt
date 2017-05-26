@@ -52,7 +52,6 @@ class TildeTest {
         val chain2 = _t.chain(ambigiousList)
         Assert.assertEquals("Flatten and initial", chain2.flatten().initial(2).value, listOf(1, 2, 3))
 
-
     }
 
     @Test
