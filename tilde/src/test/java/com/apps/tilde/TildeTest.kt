@@ -99,6 +99,16 @@ class TildeTest {
 
     }
 
+    @Test
+    fun testRest(){
+        val list = listOf("a", "b", "c", "d", "e", "f","g")
+        val result = _t.rest(list,3)
+        val expectedResponse = listOf("a", "b", "c", "d")
+
+        Assert.assertEquals("Rest check", expectedResponse, result)
+
+    }
+
     fun testExtensions() {
         testAssign()
         testAtVarargs()

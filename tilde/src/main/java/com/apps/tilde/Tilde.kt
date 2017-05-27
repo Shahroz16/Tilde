@@ -319,6 +319,17 @@ object Tilde {
     }
 
     /**
+     * Opposite of Initial, returns all but first n elements .
+     *
+     * @param list list to source from
+     * @param numElements number of elements to exclude from the beginning.
+     * @return The rest of the elements.
+     */
+    fun <T> rest(list: List<T>, numElements: Int) : List<T>{
+        return list.dropLast(numElements)
+    }
+
+    /**
      * Returns the collection wrapped in the chain object
      *
      * @param   list collection: of elements
