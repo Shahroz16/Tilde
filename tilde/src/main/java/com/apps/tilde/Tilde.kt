@@ -254,14 +254,19 @@ object Tilde {
     fun <T : Comparable<T>> loop(range: IntRange, function: () -> T) = range.forEach { function() }
 
     /**
-     * Creates an integer range based on values passed
+     * Creates an list from start to end
      *
      * @param   start           Range to start from (inclusive)
      * @param   end             Range to end on
      * @param   endInclusive    Flag to include or exclude end range
+     * @param   step            Increment by factor
      * @return  Newly created range
      */
-    fun <T> range(start: Int = 0, end: Int, endInclusive: Boolean = true) = start..if (endInclusive) end else end - 1
+    fun range(start: Int = 0, end: Int, endInclusive: Boolean = true, step: Int = 1): List<Int> {
+        val endVal: Int = if (endInclusive) end else end - 1
+        val progression: IntProgression = start..endVal step step
+        return progression.toList()
+    }
 
 
     /**
@@ -325,7 +330,7 @@ object Tilde {
      * @param numElements number of elements to exclude from the beginning.
      * @return The rest of the elements.
      */
-    fun <T> rest(list: List<T>, numElements: Int) : List<T>{
+    fun <T> rest(list: List<T>, numElements: Int): List<T> {
         return list.dropLast(numElements)
     }
 

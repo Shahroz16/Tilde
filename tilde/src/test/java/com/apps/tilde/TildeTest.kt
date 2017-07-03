@@ -1,7 +1,6 @@
 package com.apps.tilde
 
 import org.junit.Assert
-import org.junit.Test
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
@@ -63,6 +62,18 @@ class TildeTest {
         Assert.assertEquals("Binary search test", 4, result);
     }
 
+    fun testRange() {
+        val result = _t.range(end = 3)
+        val result1 = _t.range(start = 1, end = 5, endInclusive = false)
+        val result2 = _t.range(start = 1, end = 5, endInclusive = true)
+        val result4 = _t.range(start = 0, end = 20, step = 5)
+
+        Assert.assertEquals("Range check", listOf(0, 1, 2, 3), result)
+        Assert.assertEquals("Range check1", listOf(1, 2, 3, 4), result1)
+        Assert.assertEquals("Range check2", listOf(1, 2, 3, 4, 5), result2)
+        Assert.assertEquals("Range check3", listOf(0, 5, 10, 15, 20), result4)
+    }
+
     fun testReduce() {
         val list = listOf("a", "-small", "-cow")
         val expectedResponse = "a-small-cow"
@@ -84,7 +95,6 @@ class TildeTest {
         Assert.assertEquals("Reduce indexed check", expectedResponse1, result1)
     }
 
-    @Test
     fun testRemove() {
         val list = listOf("a", "b", "c", "d", "e", "f")
         val result = list.removeElementsAtIndexes(0, 2, 4, 5)
@@ -99,10 +109,9 @@ class TildeTest {
 
     }
 
-    @Test
-    fun testRest(){
-        val list = listOf("a", "b", "c", "d", "e", "f","g")
-        val result = _t.rest(list,3)
+    fun testRest() {
+        val list = listOf("a", "b", "c", "d", "e", "f", "g")
+        val result = _t.rest(list, 3)
         val expectedResponse = listOf("a", "b", "c", "d")
 
         Assert.assertEquals("Rest check", expectedResponse, result)

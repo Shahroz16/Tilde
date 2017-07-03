@@ -2,6 +2,7 @@
 ----
 Tilde is a functional tool-belt for Android. It not just only provides functional methods for Kotlin but also some wrapper for Java so you can play around with the library in Java too.
 Tilde is inspired from [Dollar][dollar] in Swift which is similar to [Lodash][lodash] and [Underscore.js][underscore-js] in Javascript.
+It also provides Java 6 and 7 users with almost all the useful methods in Java 8.
 
 > **NOTE: This library is under development**
 # Quick Jump
@@ -87,6 +88,36 @@ And here `groups` will have a 2D array as follows
 1013    1014
 ```
 
+# Range - `_t.range`
+Creates a list of numbers (positive and/or negative) progressing from start up to end
+```
+_t.range(end = 3)
+=> listOf(0, 1, 2, 3)
+
+_t.range(start = 1, end = 5, endInclusive = false)
+=> listOf(1, 2, 3, 4)
+
+_t.range(start = 1, end = 5, endInclusive = true)
+=> listOf(1, 2, 3, 4, 5)
+
+_t.range(start = 0, end = 20, step = 5)
+=> listOf(0, 5, 10, 15, 20)
+```
+
+# Reduce - `_t.reduce`
+Reduce function that will resolve to one value after performing combine function on all elements
+```
+_t.reduce(listOf(1,2,3,4))
+=> 10
+```
+
+# Remove - `Iterable.remove`
+Removes items from an list.
+```
+val list = listOf("a", "b", "c", "d", "e", "f")
+_t.remove(list, "a", "b", "f")
+=> result - listOf("c", "d", "e")
+```
 
 # Contributing
 ----
