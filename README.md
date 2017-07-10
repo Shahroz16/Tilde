@@ -4,7 +4,7 @@ Tilde is a functional tool-belt for Android. It not just only provides functiona
 Tilde is inspired from [Dollar][dollar] in Swift which is similar to [Lodash][lodash] and [Underscore.js][underscore-js] in Javascript.
 It also provides Java 6 and 7 users with almost all the useful methods in Java 8.
 
-> **NOTE: This library is under development**
+> **NOTE: This library is under development and documentation is incomplete**
 # Quick Jump
 ---
   - [Setup](#setup)
